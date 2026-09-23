@@ -1,0 +1,10 @@
+{
+  "appId": "com.bpitindia.erp",
+  "appName": "BPIT Research ERP",
+  "webDir": "public",
+  "bundledWebRuntime": false,
+  "server": {
+    "url": "http://192.168.100.147:3000",
+    "cleartext": true
+  }
+}

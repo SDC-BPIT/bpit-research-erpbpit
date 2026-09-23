@@ -1,0 +1,358 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Title {
+  Mr
+  Ms
+  Dr
+  Prof
+}
+
+enum Gender {
+  Male
+  Female
+  Transgender
+}
+
+enum Category {
+  GEN
+  SC
+  ST
+  OBC
+  EWS
+  PH
+}
+
+model User {
+  id               Int           @id @default(autoincrement())
+  name             String
+  email            String        @unique
+  password         String
+  role             String        @default("faculty")
+  dept             String
+  facultyId        String        @unique
+  isArchived       Boolean       @default(false)
+  resetToken       String?
+  resetTokenExpiry DateTime?
+  createdAt        DateTime      @default(now())
+  journals         Journal[]
+  patents          Patent[]
+  conferences      Conference[]
+  fdps             FDP[]
+  bookChapters     BookChapter[]
+  books            Book[]
+  faculty          Faculty?
+}
+
+model Course {
+  id                String             @id
+  name              String?
+  faculties         Faculty[]
+  facultyDeptDesigs FacultyDeptDesig[]
+}
+
+model Faculty {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title        Title?
+  firstName    String
+  middleName   String?
+  lastName     String?
+  gender       Gender?
+  dob          DateTime?
+  placeOfBirth String?
+  category     Category?
+  doj          DateTime?
+  dor          DateTime?
+
+  mobile      String?
+  email       String?
+  nationality String?
+  aadhaarNo   String?
+  panNo       String?
+  apaarFacultyId String?
+  bloodGroup  String?
+
+  highestDegree  String?
+  university     String?
+
+  presentAddrHNoFloor   String?
+  presentAddrStreetArea String?
+  presentAddrDistrict   String?
+  presentAddrCity       String?
+  presentAddrCountry    String?
+  presentAddrPin        String?
+
+  permanentAddrHNoFloor   String?
+  permanentAddrStreetArea String?
+  permanentAddrDistrict   String?
+  permanentAddrCity       String?
+  permanentAddrCountry    String?
+  permanentAddrPin        String?
+
+  presentDesig String?
+  presentDept  String?
+  desigAtJoiningInst String?
+  dateDesignatedProfAssocProf DateTime?
+
+  courseId       String?
+  course         Course? @relation(fields: [courseId], references: [id])
+  specialization String?
+
+  experienceYearsCurrInst String?
+  natureOfAssociation     String?
+  contractType            String?
+  currentlyAssociated     String?
+  dateOfLeaving           DateTime?
+
+  isOldFaculty Boolean @default(false)
+  oldFacultyId BigInt?
+
+  fatherName String?
+  motherName String?
+  spouseName String?
+
+  isFyCommonFaculty Boolean @default(false)
+  fyCommonSubject   String?
+
+  facultyPhoto String?
+  facultySign  String?
+
+  deptDesigs     FacultyDeptDesig[]
+  qualifications FacultyQualification[]
+
+  updatedAt DateTime @updatedAt
+}
+
+model FacultyDeptDesig {
+  id          Int       @id @default(autoincrement())
+  facultyId   Int
+  faculty     Faculty   @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  startDate   DateTime?
+  courseId    String?
+  course      Course?   @relation(fields: [courseId], references: [id])
+  designation String?
+  department  String?
+}
+
+model FacultyQualification {
+  id         Int     @id @default(autoincrement())
+  facultyId  Int
+  faculty    Faculty @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  degree     String?
+  university String?
+  year       String?
+  percentage String?
+}
+
+model Department {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+}
+
+model Journal {
+  id                     Int     @id @default(autoincrement())
+  title                  String
+  authors                String
+  journal                String
+  issn                   String?
+  publisher              String?
+  indexed                String?
+  volume                 String?
+  issue                  String?
+  pages                  String?
+  year                   String
+  impactFactor           String?
+  quartile               String?
+  affiliation            String
+  totalAuthors           String
+  authorPosition         String
+  correspondingAuthor    String
+  phdWork                String
+  supervisorFirstAuthor  String?
+  coAuthorsBPIT          String?
+  studentDetails         String?
+  publicationMonth       String
+  frequency              String?
+  sciScie                String?
+  esci                   String?
+  scopus                 String?
+  ugcCareListed          String?
+  peerReviewed           String?
+  citationsWoS           String?
+  citationsGoogleScholar String?
+  awardMoney             String?
+  doi                    String?
+  link                   String?
+  department             String?
+  academicYear           String
+  status                 String
+  submittedById          Int
+  submittedByName        String
+  submittedAt            String
+  user                   User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}
+
+model Patent {
+  id                            Int     @id @default(autoincrement())
+  title                         String
+  inventors                     String
+  applicationNo                 String
+  filingDate                    String
+  publicationDate               String?
+  grantDate                     String?
+  status                        String
+  type                          String?
+  country                       String
+  patentNo                      String?
+  department                    String
+  academicYear                  String
+  iprValidityGrantYears         String?
+  assigneesInstituteAffiliation String?
+  yourAffiliationInIPR          String?
+  submittedById                 Int
+  submittedByName               String
+  submittedAt                   String
+  user                          User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}
+
+model Conference {
+  id                    Int     @id @default(autoincrement())
+  title                 String
+  affiliation           String?
+  authors               String
+  totalAuthors          String?
+  authorPosition        String?
+  correspondingAuthor   String?
+  phdWork               String?
+  supervisorFirstAuthor String?
+  coAuthorsBPIT         String?
+  studentDetails        String?
+  conference            String
+  organized             String?
+  location              String
+  date                  String
+  status                String?
+  presentationDate      String?
+  presentationMode      String?
+  proceedingsPublished  String?
+  proceedingsTitle      String?
+  proceedingsISBN       String?
+  proceedingsPublisher  String?
+  publicationMonth      String?
+  year                  String?
+  volume                String?
+  issue                 String?
+  pages                 String?
+  scopus                String?
+  doi                   String?
+  registrationAmount    String?
+  amountSponsoredByBPIT String?
+  indexed               String?
+  paperType             String?
+  department            String
+  academicYear          String
+  submittedById         Int
+  submittedByName       String
+  submittedAt           String
+  user                  User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}
+
+model FDP {
+  id                    Int     @id @default(autoincrement())
+  title                 String
+  faculty               String
+  organizer             String
+  sponsor               String?
+  mode                  String
+  type                  String?
+  startDate             String
+  endDate               String
+  duration              String
+  certificateNo         String?
+  amountSponsoredByBPIT String?
+  department            String
+  academicYear          String
+  submittedById         Int
+  submittedByName       String
+  submittedAt           String
+  user                  User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}
+
+model BookChapter {
+  id                    Int     @id @default(autoincrement())
+  title                 String
+  affiliation           String?
+  authors               String
+  totalAuthors          String?
+  authorPosition        String?
+  correspondingAuthor   String?
+  phdWork               String?
+  supervisorFirstAuthor String?
+  coAuthorsBPIT         String?
+  studentDetails        String?
+  bookTitle             String
+  editors               String?
+  publisher             String
+  isbn                  String?
+  status                String?
+  publicationMonth      String?
+  year                  String
+  volume                String?
+  pageNo                String?
+  impactFactor          String?
+  sciScie               String?
+  esci                  String?
+  scopus                String?
+  scopusQuadrant        String?
+  ugcCareListed         String?
+  peerReviewed          String?
+  doi                   String?
+  link                  String?
+  indexed               String?
+  department            String
+  academicYear          String
+  submittedById         Int
+  submittedByName       String
+  submittedAt           String
+  user                  User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}
+
+model Book {
+  id               Int     @id @default(autoincrement())
+  title            String
+  affiliation      String?
+  role             String?
+  authorPosition   String?
+  authors          String
+  coAuthorsBPIT    String?
+  publisher        String
+  isbn             String?
+  year             String
+  publicationMonth String?
+  bookPublished    String?
+  edition          String?
+  type             String?
+  pages            String?
+  volume           String?
+  sciScie          String?
+  esci             String?
+  scopus           String?
+  doi              String?
+  link             String?
+  department       String
+  academicYear     String
+  submittedById    Int
+  submittedByName  String
+  submittedAt      String
+  user             User    @relation(fields: [submittedById], references: [id], onDelete: Cascade)
+}

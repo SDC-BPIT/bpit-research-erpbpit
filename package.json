@@ -1,0 +1,33 @@
+{
+  "name": "bpit-research-erp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/cli": "^8.4.2",
+    "@capacitor/core": "^8.4.2",
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^3.0.3",
+    "cookie": "^0.6.0",
+    "jsonwebtoken": "^9.0.3",
+    "next": "16.1.6",
+    "nodemailer": "^8.0.4",
+    "pg": "^8.22.0",
+    "prisma": "^5.22.0",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "recharts": "^3.8.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "babel-plugin-react-compiler": "1.0.0"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }
+}
